@@ -2,10 +2,13 @@
 
 echo "Checking if ~/.profile file exists..."
 
-if [ -f "/home/jovyan/.profile" ]; then
-  echo " Sourcing /home/jovyan/.profile..."
-  source /home/jovyan/.profile
+if [ -f "~/.profile" ]; then
+  echo " Sourcing ~/.profile..."
+  source ~/.profile
   echo " ~/.profile sourced successfully."
 else
-  echo " ~/.profile file not found. Skipping sourcing."
+  echo " No ~/.profile file found. Copying original .bashrc file and sourcing ~/.profile..."
+  cp sudo cp /opt/.bashrc ~/.profile
+  source ~/.profile
+  echo " ~/.profile sourced successfully."
 fi
