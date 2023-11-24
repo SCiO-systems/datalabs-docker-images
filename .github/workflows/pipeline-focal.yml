@@ -6,7 +6,8 @@ on:
       - develop
       - main
     paths:
-      - 'focal/*'
+      - '.github/workflows/pipeline-focal.yml'
+      - 'focal/**'
 
 permissions:
   contents: read
