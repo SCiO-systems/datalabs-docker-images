@@ -126,5 +126,8 @@ RUN conda install -c conda-forge --file requirements.txt -y
 
 RUN rm packages.R requirements.txt
 
-### Copy bash scripts to startup notebook directory
+### Copying .bashrc of default $HOME directory to /opt
+RUN sudo cp .bashrc /opt/
+
+### Copying bash scripts to startup notebook directory
 COPY scripts/* /usr/local/bin/start-notebook.d/
