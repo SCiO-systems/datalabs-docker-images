@@ -8,7 +8,7 @@ if [ -f "~/.profile" ]; then
   echo " ~/.profile sourced successfully."
 else
   echo " No ~/.profile file found. Copying original .bashrc file and sourcing ~/.profile..."
-  cp sudo cp /opt/.bashrc ~/.profile
+  sudo cp /opt/.bashrc ~/.profile
   source ~/.profile
   echo " ~/.profile sourced successfully."
 fi
