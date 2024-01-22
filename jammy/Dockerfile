@@ -46,9 +46,9 @@ RUN sudo echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packa
 ### GDAL installation
 RUN wget https://github.com/OSGeo/gdal/releases/download/v${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz && \
     tar -xvf gdal-${GDAL_VERSION}.tar.gz && \
-    mv gdal-${GDAL_VERSION} /opt && \
+    sudo mv gdal-${GDAL_VERSION} /opt && \
     cd /opt/gdal-${GDAL_VERSION} && \
-    mkdir build && \
+    sudo mkdir build && \
     cd build && \
     cmake .. && \
     cmake --build . && \
