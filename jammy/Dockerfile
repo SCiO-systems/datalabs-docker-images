@@ -1,5 +1,7 @@
 FROM jupyter/scipy-notebook:ubuntu-22.04
 
+ENV GDAL_VERSION=3.8.3
+
 USER root
 
 ### Providing root privillages to default "jovyan" user account
@@ -9,16 +11,7 @@ USER jovyan
 
 ### OS Packages installation
 RUN sudo apt-get update && sudo apt-get install aptitude gdebi-core curl wget tar build-essential cmake make default-jre default-jdk cron screen pkg-config protobuf-compiler \
-    libfontconfig1-dev libgsl-dev libudunits2-dev libprotobuf-dev libjq-dev libmagick++-dev gfortran fftw3 fftw3-dev libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libsodium-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libgmp3-dev libmpfr-dev libarchive-dev gnupg -y
-
-### GDAL installation
-RUN sudo apt-get install libgdal-dev libproj-dev -y
-
-### gsutil installation
-RUN sudo echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && sudo apt-get update -y && sudo apt-get install google-cloud-cli -y
-
-### NCO installation
-RUN sudo aptitude install nco -y
+    libfontconfig1-dev libgsl-dev libudunits2-dev libprotobuf-dev libjq-dev libmagick++-dev gfortran fftw3 fftw3-dev libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libsodium-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libgmp3-dev libmpfr-dev libarchive-dev libproj-dev gnupg nco -y
 
 ### R installation - https://cran.r-project.org/bin/linux/ubuntu/#acknowledgements
 RUN sudo apt install --no-install-recommends software-properties-common dirmngr -y
@@ -38,14 +31,28 @@ RUN echo "deb http://security.ubuntu.com/ubuntu focal-security main" | sudo tee 
     sudo apt-get install libssl1.1 -y
 
 RUN cd /tmp && \
-    wget https://download2.rstudio.org/server/focal/amd64/rstudio-server-2023.09.0-463-amd64.deb && \
-    sudo gdebi -n rstudio-server-2023.09.0-463-amd64.deb
+    wget https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2023.12.0-369-amd64.deb && \
+    sudo gdebi rstudio-server-2023.12.0-369-amd64.deb
 
 ENV PATH=$PATH:/usr/lib/rstudio-server/bin
 
 ## Rstudio server Jupyter plugin installation
 RUN python3 -m pip install jupyter-rsession-proxy
 RUN pip install jupyter-server-proxy
+
+### gsutil installation
+RUN sudo echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && sudo apt-get update -y && sudo apt-get install google-cloud-cli -y
+
+### GDAL installation
+RUN wget https://github.com/OSGeo/gdal/releases/download/v${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz && \
+    tar -xvf gdal-${GDAL_VERSION}.tar.gz && \
+    gdal-${GDAL_VERSION} /opt && \
+    cd /opt/gdal-${GDAL_VERSION} && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    cmake --build . && \
+    cmake --build . --target install
 
 ### CROP models installation
 ## DSSAT installation
@@ -129,5 +136,5 @@ RUN rm packages.R requirements.txt
 ### Copying .bashrc of default $HOME directory to /opt
 RUN sudo cp .bashrc /opt/
 
-### Copying bash scripts to startup notebook directory
+### Copy bash scripts to startup notebook directory
 COPY scripts/* /usr/local/bin/start-notebook.d/
