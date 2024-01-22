@@ -50,9 +50,9 @@ RUN wget https://github.com/OSGeo/gdal/releases/download/v${GDAL_VERSION}/gdal-$
     cd /opt/gdal-${GDAL_VERSION} && \
     sudo mkdir build && \
     cd build && \
-    cmake .. && \
-    cmake --build . && \
-    cmake --build . --target install
+    sudo cmake .. && \
+    sudo cmake --build . && \
+    sudo cmake --build . --target install
 
 ### CROP models installation
 ## DSSAT installation
