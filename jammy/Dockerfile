@@ -60,13 +60,14 @@ RUN cd /tmp && \
 RUN cd /tmp/ && \
     wget https://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 && \
     tar -xvf geos-${GEOS_VERSION}.tar.bz2 && \
-    cd geos-${GEOS_VERSION} && \
-    mkdir build && \
+    sudo mv geos-${GEOS_VERSION} /opt && \
+    cd /opt/geos-${GEOS_VERSION} && \
+    sudo mkdir build && \
     cd build/ && \
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local .. && \
-    make && \
-    ctest && \
-    make install
+    sudo cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local .. && \
+    sudo make && \
+    sudo ctest && \
+    sudo make install
 
 RUN cd /tmp && \
     wget https://github.com/OSGeo/gdal/releases/download/v${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz && \
@@ -129,20 +130,20 @@ RUN cd /opt/ && \
     sudo chown -R jovyan:users /opt/ApsimX/. && \
     dotnet build -c Release ./ApsimX/ApsimX.sln
 
+COPY . .
+
 # ## rJava dependencies
 # RUN sudo R CMD javareconf
-
-# COPY . .
 
 # # From here on: 3 cores: 48m2s, 4 cores 38m4s, 6 cores 37m3s
 # RUN sudo Rscript packages.R
 
-# ### Python packages installation
-# RUN pip install -r jupyterlab.requirments.txt
-# RUN conda install -c conda-forge --file requirements.txt -y
+### Python packages installation
+RUN pip install -r jupyterlab.requirments.txt
+RUN conda install -c conda-forge --file requirements.txt -y
 
-# ### Copying .bashrc of default $HOME directory to /opt
-# RUN sudo cp .bashrc /opt/
+### Copying .bashrc of default $HOME directory to /opt
+RUN sudo cp .bashrc /opt/
 
-# ### Copy bash scripts to startup notebook directory
-# COPY scripts/* /usr/local/bin/start-notebook.d/
+### Copy bash scripts to startup notebook directory
+COPY scripts/* /usr/local/bin/start-notebook.d/
