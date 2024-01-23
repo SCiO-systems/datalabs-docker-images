@@ -107,6 +107,8 @@ RUN cd /opt/ && \
 ## rJava dependencies
 RUN sudo R CMD javareconf
 
+COPY . .
+
 # From here on: 3 cores: 48m2s, 4 cores 38m4s, 6 cores 37m3s
 RUN sudo Rscript packages.R
 
