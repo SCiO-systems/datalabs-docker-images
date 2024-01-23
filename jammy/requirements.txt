@@ -1,4 +1,4 @@
-gdal 
+GDAL=="$(gdal-config --version).*"
 pyproj 
 rasterio 
 xarray 

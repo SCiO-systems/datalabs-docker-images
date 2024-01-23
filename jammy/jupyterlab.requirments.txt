@@ -1,0 +1,13 @@
+# Jupyterlab plugins
+aquirdturtle_collapsible_headings
+jupyterlab-spellchecker
+jupyterlab-git
+jupyterlab_code_formatter
+lckr-jupyterlab-variableinspector
+jupyterlab_execute_time
+jupyterlab-hide-code
+jupyterlab-lsp
+jupyterlab-geojson
+jupyterlab-fasta
+jupyterlab-drawio
+jupyter-archive
