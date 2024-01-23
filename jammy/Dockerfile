@@ -42,7 +42,19 @@ RUN pip install jupyter-server-proxy
 RUN sudo echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && sudo apt-get update -y && sudo apt-get install google-cloud-cli -y
 
 ### GDAL installation
+ENV PROJ_VERSION=9.3.0
 ENV GDAL_VERSION=3.8.3
+
+RUN cd /tmp && \
+    wget https://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
+    tar -xvf proj-${PROJ_VERSION}.tar.gz && \
+    sudo mv proj-${PROJ_VERSION} /opt && \
+    cd /opt/proj-${PROJ_VERSION} && \
+    sudo mkdir build && \
+    cd build && \
+    sudo cmake .. && \
+    sudo cmake --build . && \
+    sudo cmake --build . --target install
 
 RUN wget https://github.com/OSGeo/gdal/releases/download/v${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz && \
     tar -xvf gdal-${GDAL_VERSION}.tar.gz && \
