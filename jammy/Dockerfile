@@ -41,21 +41,10 @@ RUN pip install jupyter-server-proxy
 ### gsutil installation
 RUN sudo echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && sudo apt-get update -y && sudo apt-get install google-cloud-cli -y
 
-### GDAL installation
-ENV PROJ_VERSION=9.3.0
+ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 ENV GEOS_VERSION=3.12.1
+ENV PROJ_VERSION=9.3.0
 ENV GDAL_VERSION=3.8.3
-
-RUN cd /tmp && \
-    wget https://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
-    tar -xvf proj-${PROJ_VERSION}.tar.gz && \
-    sudo mv proj-${PROJ_VERSION} /opt && \
-    cd /opt/proj-${PROJ_VERSION} && \
-    sudo mkdir build && \
-    cd build && \
-    sudo cmake .. && \
-    sudo cmake --build . && \
-    sudo cmake --build . --target install
 
 RUN cd /tmp/ && \
     wget https://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 && \
@@ -67,7 +56,22 @@ RUN cd /tmp/ && \
     sudo cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local .. && \
     sudo make && \
     sudo ctest && \
-    sudo make install
+    sudo make install && \
+    cd ../.. && \
+    ldconfig
+
+RUN cd /tmp && \
+    wget https://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
+    tar -xvf proj-${PROJ_VERSION}.tar.gz && \
+    sudo mv proj-${PROJ_VERSION} /opt && \
+    cd /opt/proj-${PROJ_VERSION} && \
+    sudo mkdir build && \
+    cd build && \
+    sudo cmake .. && \
+    sudo cmake --build . && \
+    sudo cmake --build . --target install && \
+    cd ../.. && \
+    ldconfig
 
 RUN cd /tmp && \
     wget https://github.com/OSGeo/gdal/releases/download/v${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz && \
@@ -78,7 +82,9 @@ RUN cd /tmp && \
     cd build && \
     sudo cmake .. && \
     sudo cmake --build . && \
-    sudo cmake --build . --target install
+    sudo cmake --build . --target install && \
+    cd ../.. && \
+    ldconfig
 
 ### CROP models installation
 ## DSSAT installation
@@ -132,11 +138,11 @@ RUN cd /opt/ && \
 
 COPY . .
 
-# ## rJava dependencies
-# RUN sudo R CMD javareconf
+## rJava dependencies
+RUN sudo R CMD javareconf
 
-# # From here on: 3 cores: 48m2s, 4 cores 38m4s, 6 cores 37m3s
-# RUN sudo Rscript packages.R
+# From here on: 3 cores: 48m2s, 4 cores 38m4s, 6 cores 37m3s
+RUN sudo Rscript packages.R
 
 ### Python packages installation
 RUN pip install -r jupyterlab.requirments.txt

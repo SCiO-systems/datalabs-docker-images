@@ -1,4 +1,3 @@
-# Jupyterlab plugins
 aquirdturtle_collapsible_headings
 jupyterlab-spellchecker
 jupyterlab-git
