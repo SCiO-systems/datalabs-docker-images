@@ -1,6 +1,9 @@
-FROM jupyter/scipy-notebook:ubuntu-22.04
+FROM jupyter/base-notebook:ubuntu-22.04
 
 USER root
+
+ENV TZ=Europe/London
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 ### Providing root privillages to default "jovyan" user account
 RUN echo "jovyan ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -11,7 +14,7 @@ USER jovyan
 RUN sudo apt-get update && sudo apt-get install aptitude gdebi-core curl wget tar build-essential cmake make default-jre default-jdk cron screen pkg-config protobuf-compiler \
     libfontconfig1-dev libgsl-dev libudunits2-dev libprotobuf-dev libjq-dev libmagick++-dev gfortran fftw3 fftw3-dev libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev \
     libsodium-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libgmp3-dev libmpfr-dev libarchive-dev libproj-dev libgeos-dev gnupg nco \
-    gcc g++ libsqlite3-dev sqlite3 dotnet-sdk-6.0 proj-bin -y
+    gcc g++ libsqlite3-dev sqlite3 dotnet-sdk-6.0 proj-bin git nano tzdata unzip -y
 
 ### R installation - https://cran.r-project.org/bin/linux/ubuntu/#acknowledgements
 RUN sudo apt install --no-install-recommends software-properties-common dirmngr -y && \

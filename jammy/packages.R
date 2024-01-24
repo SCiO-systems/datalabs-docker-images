@@ -22,4 +22,4 @@ devtools::install_github(c("CIAT-DAPA/analogues",
                    "SantanderMetGroup/convertR",
                    "SantanderMetGroup/climate4R.indices",
                    "bakaburg1/BaySREn"), 
-    configure.args="Ncpus = 4")
+    Ncpus = 4)
