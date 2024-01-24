@@ -58,7 +58,7 @@ RUN cd /tmp/ && \
     sudo ctest && \
     sudo make install && \
     cd ../.. && \
-    ldconfig
+    sudo ldconfig
 
 RUN cd /tmp && \
     wget https://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz && \
@@ -71,7 +71,7 @@ RUN cd /tmp && \
     sudo cmake --build . && \
     sudo cmake --build . --target install && \
     cd ../.. && \
-    ldconfig
+    sudo ldconfig
 
 RUN cd /tmp && \
     wget https://github.com/OSGeo/gdal/releases/download/v${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz && \
@@ -84,7 +84,7 @@ RUN cd /tmp && \
     sudo cmake --build . && \
     sudo cmake --build . --target install && \
     cd ../.. && \
-    ldconfig
+    sudo ldconfig
 
 ### CROP models installation
 ## DSSAT installation
