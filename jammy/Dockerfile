@@ -43,7 +43,7 @@ RUN sudo echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packa
 
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 ENV GEOS_VERSION=3.12.1
-ENV PROJ_VERSION=9.3.0
+ENV PROJ_VERSION=9.3.1
 ENV GDAL_VERSION=3.8.3
 
 RUN cd /tmp/ && \
