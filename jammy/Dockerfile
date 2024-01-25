@@ -1,9 +1,6 @@
-FROM jupyter/base-notebook:ubuntu-22.04
+FROM jupyter/datascience-notebook:ubuntu-22.04
 
 USER root
-
-ENV TZ=Europe/London
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 ### Providing root privillages to default "jovyan" user account
 RUN echo "jovyan ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -11,20 +8,20 @@ RUN echo "jovyan ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 USER jovyan
 
 ### OS Packages installation
-RUN sudo apt-get update && sudo apt-get install aptitude gdebi-core curl wget tar build-essential cmake make default-jre default-jdk cron screen pkg-config protobuf-compiler \
+RUN sudo apt-get update && sudo apt-get install aptitude gdebi-core build-essential cmake make default-jre default-jdk cron screen pkg-config protobuf-compiler \
     libfontconfig1-dev libgsl-dev libudunits2-dev libprotobuf-dev libjq-dev libmagick++-dev gfortran fftw3 fftw3-dev libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev \
     libsodium-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libgmp3-dev libmpfr-dev libarchive-dev libproj-dev libgeos-dev gnupg nco \
-    gcc g++ libsqlite3-dev sqlite3 dotnet-sdk-6.0 proj-bin git nano tzdata unzip -y
+    gcc g++ libsqlite3-dev sqlite3 dotnet-sdk-6.0 -y
 
 ### R installation - https://cran.r-project.org/bin/linux/ubuntu/#acknowledgements
-RUN sudo apt install --no-install-recommends software-properties-common dirmngr -y && \
-    wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc && \
-    sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" && \
-    sudo apt install --no-install-recommends r-base -y
+# RUN sudo apt install --no-install-recommends software-properties-common dirmngr -y && \
+#     wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc && \
+#     sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" && \
+#     sudo apt install --no-install-recommends r-base -y
 
 ## Installing R kernel to jupyterlab
-RUN sudo R -e "install.packages('IRkernel')"
-RUN R -e "IRkernel::installspec()"
+# RUN sudo R -e "install.packages('IRkernel')"
+# RUN R -e "IRkernel::installspec()"
 
 ## Rstudio server installation (It is running under R kernel - https://posit.co/download/rstudio-server/)
 RUN echo "deb http://security.ubuntu.com/ubuntu focal-security main" | sudo tee /etc/apt/sources.list.d/focal-security.list && \
@@ -141,15 +138,15 @@ RUN cd /opt/ && \
 
 COPY . .
 
-## rJava dependencies
-RUN sudo R CMD javareconf
-
-# From here on: 3 cores: 48m2s, 4 cores 38m4s, 6 cores 37m3s
-RUN sudo Rscript packages.R
+# ## rJava dependencies
+# RUN sudo R CMD javareconf
 
 ### Python packages installation
 RUN pip install -r jupyterlab.requirments.txt
-RUN conda install -c conda-forge --file requirements.txt -y
+RUN conda install -c conda-forge --file conda-forge.requirements.txt -y
+RUN conda install -c r --file r.requirements.txt -y
+
+RUN sudo Rscript packages.R
 
 ### Copying .bashrc of default $HOME directory to /opt
 RUN sudo cp .bashrc /opt/

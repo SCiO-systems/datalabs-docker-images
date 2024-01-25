@@ -1,6 +1,0 @@
-GDAL==3.8.3
-pyproj 
-rasterio 
-xarray 
-cdsapi
-nb_conda_kernels
