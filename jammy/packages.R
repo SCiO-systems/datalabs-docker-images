@@ -11,7 +11,8 @@
 #     repos='http://cran.rstudio.com/', 
 #     Ncpus = 4)
 
-install.packages(c('envirem'), dependencies=TRUE, repos='http://cran.rstudio.com/', Ncpus = 4)
+install.packages(c('envirem', 'rgeodata', 'diagis', 'metan', 'microsoft365r' ,'r-ecmwfr'), dependencies=TRUE, repos='http://cran.rstudio.com/', Ncpus = 4)
+
 devtools::install_github(c("CIAT-DAPA/analogues",
                    "SantanderMetGroup/loadeR.java",
                    "SantanderMetGroup/climate4R.UDG",
