@@ -146,7 +146,7 @@ RUN pip install -r jupyterlab.requirments.txt
 RUN conda install -c conda-forge --file conda-forge.requirements.txt -y
 # RUN conda install -c r --file r.requirements.txt -y
 
-RUN sudo Rscript packages.R
+# RUN sudo Rscript packages.R
 
 ### Copying .bashrc of default $HOME directory to /opt
 RUN sudo cp .bashrc /opt/
