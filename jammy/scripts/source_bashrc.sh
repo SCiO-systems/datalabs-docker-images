@@ -7,5 +7,8 @@ if [ -f "/home/jovyan/.bashrc" ]; then
   source /home/jovyan/.bashrc
   echo " ~/.bashrc sourced successfully."
 else
-  echo " ~/.bashrc file not found. Skipping sourcing."
+  echo " No ~/.profile file found. Copying original .bashrc file and sourcing ~/.profile..."
+  sudo cp /opt/.bashrc ~/.profile
+  source ~/.profile
+  echo " ~/.profile sourced successfully."
 fi
