@@ -11,4 +11,3 @@ else
   sudo cp /opt/.bashrc ~/.profile
   source ~/.profile
   echo " ~/.profile sourced successfully."
-fi
