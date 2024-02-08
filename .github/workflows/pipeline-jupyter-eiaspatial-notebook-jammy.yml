@@ -1,4 +1,4 @@
-name: Build and Push Docker Images (jammy)
+name: Build and Push Docker Images (jupyter-eiaspatial-notebook-jammy)
 
 on:
   push:
@@ -6,21 +6,21 @@ on:
       - develop
       - main
     paths:
-      - '.github/workflows/pipeline-jammy.yml'
-      - 'jammy/**'
+      - '.github/workflows/pipeline-jupyter-eiaspatial-notebook-jammy.yml'
+      - 'jupyter-eiaspatial-notebook/jammy/**'
 
 permissions:
   contents: read
 
 jobs:
-  build_and_push_jammy_dev:
+  build_and_push_dev:
     runs-on: "self-hosted"
     if: startsWith(github.ref, 'refs/heads/develop')
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
+      
       - name: Get short SHA
         uses: benjlevesque/short-sha@v2.2
         id: short-sha
@@ -39,16 +39,16 @@ jobs:
       - name: Build and Push Docker Image (dev)
         uses: docker/build-push-action@v4      
         with:
-          context: ./jammy
-          file: ./jammy/Dockerfile
+          context: ./jupyter-eiaspatial-notebook/jammy
+          file: ./jupyter-eiaspatial-notebook/jammy/Dockerfile
           push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-jammy-${{ secrets.RELEASE_VERSION }}-${{ steps.short-sha.outputs.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-jammy-${{ secrets.RELEASE_VERSION }}
+          tags: | 
+            ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-jammy-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }}-${{ steps.short-sha.outputs.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-jammy-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  build_and_push_jammy_prod:
+  build_and_push_prod:
     runs-on: "self-hosted"
     if: startsWith(github.ref, 'refs/heads/main')
 
@@ -63,16 +63,16 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Pull "dev" Docker image
-        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-jammy-${{ secrets.RELEASE_VERSION }}
+        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-jammy-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }}
 
       - name: Tag producion Docker image
-        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-jammy-${{ secrets.RELEASE_VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:jammy-${{ secrets.RELEASE_VERSION }}
+        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-jammy-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:jammy-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }}
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:jammy-${{ secrets.RELEASE_VERSION }}
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:jammy-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }}
 
       - name: Tag producion Docker image (non specified version)
-        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:jammy-${{ secrets.RELEASE_VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:jammy
+        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:jammy-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:jammy
 
       - name: Push Docker image (non specified version)
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:jammy

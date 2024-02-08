@@ -1,4 +1,4 @@
-name: Build and Push Docker Images (focal)
+name: Build and Push Docker Images (jupyter-eiaspatial-notebook-focal)
 
 on:
   push:
@@ -6,14 +6,14 @@ on:
       - develop
       - main
     paths:
-      - '.github/workflows/pipeline-focal.yml'
-      - 'focal/**'
+      - '.github/workflows/pipeline-jupyter-eiaspatial-notebook-focal.yml'
+      - 'jupyter-eiaspatial-notebook/focal/**'
 
 permissions:
   contents: read
 
 jobs:
-  build_and_push_focal_dev:
+  build_and_push_dev:
     runs-on: "self-hosted"
     if: startsWith(github.ref, 'refs/heads/develop')
 
@@ -39,16 +39,16 @@ jobs:
       - name: Build and Push Docker Image (dev)
         uses: docker/build-push-action@v4      
         with:
-          context: ./focal
-          file: ./focal/Dockerfile
+          context: ./jupyter-eiaspatial-notebook/focal
+          file: ./jupyter-eiaspatial-notebook/focal/Dockerfile
           push: true
           tags: | 
-            ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-focal-${{ secrets.RELEASE_VERSION }}-${{ steps.short-sha.outputs.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-focal-${{ secrets.RELEASE_VERSION }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-focal-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }}-${{ steps.short-sha.outputs.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-focal-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  build_and_push_focal_prod:
+  build_and_push_prod:
     runs-on: "self-hosted"
     if: startsWith(github.ref, 'refs/heads/main')
 
@@ -63,16 +63,16 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Pull "dev" Docker image
-        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-focal-${{ secrets.RELEASE_VERSION }}
+        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-focal-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }}
 
       - name: Tag producion Docker image
-        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-focal-${{ secrets.RELEASE_VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:focal-${{ secrets.RELEASE_VERSION }}
+        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-focal-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:focal-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }}
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:focal-${{ secrets.RELEASE_VERSION }}
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:focal-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }}
 
       - name: Tag producion Docker image (non specified version)
-        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:focal-${{ secrets.RELEASE_VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:focal
+        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:focal-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:focal
 
       - name: Push Docker image (non specified version)
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:focal
