@@ -1,4 +1,4 @@
-name: Build and Push Docker Images (jammy)
+name: Build and Push Docker Images (jupyter-eiar-notebook)
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - develop
       - main
     paths:
-      - '.github/workflows/pipeline-jammy.yml'
-      - 'jammy/**'
+      - ".github/workflows/pipeline-jammy.yml"
+      - "jupyter-eiar-notebook/**"
 
 permissions:
   contents: read
@@ -37,10 +37,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and Push Docker Image (dev)
-        uses: docker/build-push-action@v4      
+        uses: docker/build-push-action@v4
         with:
-          context: ./jammy
-          file: ./jammy/Dockerfile
+          context: ./jupyter-eiar-notebook
+          file: ./jupyter-eiar-notebook/Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-jammy-${{ secrets.RELEASE_VERSION }}-${{ steps.short-sha.outputs.sha }}
