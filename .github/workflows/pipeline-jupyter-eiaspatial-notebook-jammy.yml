@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  build_and_push_jammy_dev:
+  build_and_push_dev:
     runs-on: "self-hosted"
     if: startsWith(github.ref, 'refs/heads/develop')
 
@@ -48,7 +48,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  build_and_push_jammy_prod:
+  build_and_push_prod:
     runs-on: "self-hosted"
     if: startsWith(github.ref, 'refs/heads/main')
 
