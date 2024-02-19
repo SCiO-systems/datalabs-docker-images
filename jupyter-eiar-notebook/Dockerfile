@@ -41,6 +41,50 @@ ENV PATH=$PATH:/usr/lib/rstudio-server/bin
 RUN python3 -m pip install jupyter-rsession-proxy
 RUN pip install jupyter-server-proxy
 
+### CROP models installation
+## DSSAT installation
+RUN sudo mkdir -p /opt/DSSAT/v4.7.5.30 && \
+    sudo chown -R jovyan:users /opt/DSSAT/v4.7.5.30/.
+
+RUN sudo mkdir -p /opt/DSSAT/v4.8.1.40 && \
+    sudo chown -R jovyan:users /opt/DSSAT/v4.8.1.40/.
+
+# v4.7.5.30 installation
+RUN cd /opt/DSSAT/v4.7.5.30 && \
+    git clone https://github.com/DSSAT/dssat-csm-os.git --depth 1 --branch v4.7.5.30 && \
+    git clone https://github.com/DSSAT/dssat-csm-data.git
+
+RUN cd /opt/DSSAT/v4.7.5.30/dssat-csm-os && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make
+
+# Adjusting filesystem to DSSAT compiler requirements
+RUN cp /opt/DSSAT/v4.7.5.30/dssat-csm-os/build/bin/* /opt/DSSAT/v4.7.5.30
+RUN cp -r /opt/DSSAT/v4.7.5.30/dssat-csm-os/Data/. /opt/DSSAT/v4.7.5.30
+RUN cp -r /opt/DSSAT/v4.7.5.30/dssat-csm-data/* /opt/DSSAT/v4.7.5.30
+RUN sed -i 's,/usr/local,opt/DSSAT/v4.7.5.30,g' /opt/DSSAT/v4.7.5.30/DSSATPRO.L47
+RUN chown -R jovyan:users /opt/DSSAT/v4.7.5.30/*
+
+# v4.8.1.40 installation
+RUN cd /opt/DSSAT/v4.8.1.40  && \
+    git clone https://github.com/DSSAT/dssat-csm-os.git --depth 1 --branch v4.8.1.40  && \
+    git clone https://github.com/DSSAT/dssat-csm-data.git
+
+RUN cd /opt/DSSAT/v4.8.1.40/dssat-csm-os && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make
+
+# Adjusting filesystem to DSSAT compiler requirements
+RUN cp /opt/DSSAT/v4.8.1.40/dssat-csm-os/build/bin/* /opt/DSSAT/v4.8.1.40
+RUN cp -r /opt/DSSAT/v4.8.1.40/dssat-csm-os/Data/. /opt/DSSAT/v4.8.1.40
+RUN cp -r /opt/DSSAT/v4.8.1.40/dssat-csm-data/* /opt/DSSAT/v4.8.1.40
+RUN sed -i 's,/usr/local,opt/DSSAT/v4.8.1.40,g' /opt/DSSAT/v4.8.1.40/DSSATPRO.L48
+RUN chown -R jovyan:users /opt/DSSAT/v4.8.1.40/*
+
 ### Jupyter extensions & plugins installation
 RUN pip install aquirdturtle_collapsible_headings
 RUN pip install jupyterlab-spellchecker
@@ -54,3 +98,8 @@ RUN pip install jupyterlab-geojson
 RUN pip install jupyterlab-fasta
 RUN pip install jupyterlab-drawio
 RUN pip install jupyter-archive
+
+### R packages installation
+COPY . .
+
+RUN sudo Rscript packages.R
