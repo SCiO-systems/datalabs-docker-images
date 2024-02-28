@@ -6,8 +6,8 @@ on:
       - develop
       - main
     paths:
-      - '.github/workflows/pipeline-jupyter-eiaspatial-notebook-jammy.yml'
-      - 'jupyter-eiaspatial-notebook/jammy/**'
+      - ".github/workflows/pipeline-jupyter-eiaspatial-notebook-jammy.yml"
+      - "jupyter-eiaspatial-notebook/jammy/**"
 
 permissions:
   contents: read
