@@ -39,7 +39,7 @@ jobs:
       - name: Build and Push Docker Image (dev)
         uses: docker/build-push-action@v5
         with:
-          context: ./jupyter-eiaspatial-notebook/jammy
+          context: ./jupyter-eiaspatial-notebook
           file: ./jupyter-eiaspatial-notebook/jammy/Dockerfile
           push: true
           tags: | 
