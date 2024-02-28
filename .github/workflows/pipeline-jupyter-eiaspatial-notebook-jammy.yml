@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build_and_push_dev:
-    runs-on: "self-hosted"
+    runs-on: "ubuntu-latest"
     if: startsWith(github.ref, 'refs/heads/develop')
 
     steps:
