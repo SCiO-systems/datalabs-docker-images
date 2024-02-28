@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - '.github/workflows/pipeline-jupyter-eiaspatial-notebook-focal.yml'
-      - 'jupyter-eiaspatial-notebook/focal/**'
+      - 'jupyter-eiaspatial-notebook/focal/*'
 
 permissions:
   contents: read
