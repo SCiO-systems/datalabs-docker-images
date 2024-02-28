@@ -42,10 +42,10 @@ jobs:
       - name: Build and Push Docker Image (dev)
         uses: docker/build-push-action@v5 
         with:
-          context: "{{defaultContext}}:jupyter-eiaspatial-notebook/jammy"
-          file: ./jupyter-eiaspatial-notebook/jammy/Dockerfile
+          context: jupyter-eiaspatial-notebook/jammy
+          file: jupyter-eiaspatial-notebook/jammy/Dockerfile
           push: true
-          tags: |
+          tags: | 
             ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-jammy-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }}-${{ steps.short-sha.outputs.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiaspatial-notebook:dev-jammy-${{ secrets.JUPYTER_EIASPATIAL_NOTEBOOK_RELEASE_VERSION }}
           cache-from: type=gha
