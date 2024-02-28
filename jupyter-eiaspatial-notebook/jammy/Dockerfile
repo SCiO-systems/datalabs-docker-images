@@ -9,7 +9,7 @@ USER jovyan
 
 ### OS Packages installation
 RUN sudo apt-get update && sudo apt-get install aptitude gdebi-core curl wget tar build-essential cmake make default-jre default-jdk cron screen pkg-config protobuf-compiler \
-    libfontconfig1-dev libgsl-dev libudunits2-dev libprotobuf-dev libjq-dev libmagick++-dev gfortran fftw3 fftw3-dev libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libsodium-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libgmp3-dev libmpfr-dev libarchive-dev gnupg -y
+    libfontconfig1-dev libgsl-dev libudunits2-dev libprotobuf-dev libjq-dev libmagick++-dev gfortran fftw3 fftw3-dev libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libsodium-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libgmp3-dev libmpfr-dev libarchive-dev gnupg software-properties-common dirmngr -y
 
 ### GDAL installation
 RUN sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
@@ -23,7 +23,6 @@ RUN sudo echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packa
 RUN sudo aptitude install nco -y
 
 ### R installation - https://cran.r-project.org/bin/linux/ubuntu/#acknowledgements
-RUN sudo apt install --no-install-recommends software-properties-common dirmngr -y
 RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
 RUN sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
 RUN sudo apt install --no-install-recommends r-base -y
