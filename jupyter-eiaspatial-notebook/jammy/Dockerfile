@@ -11,10 +11,9 @@ USER jovyan
 RUN sudo apt-get update && sudo apt-get install aptitude gdebi-core curl wget tar build-essential cmake make default-jre default-jdk cron screen pkg-config protobuf-compiler \
     libfontconfig1-dev libgsl-dev libudunits2-dev libprotobuf-dev libjq-dev libmagick++-dev gfortran fftw3 fftw3-dev libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libsodium-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libgmp3-dev libmpfr-dev libarchive-dev gnupg software-properties-common dirmngr -y
 
-### GDAL installation
+### GDAL installation (unstable repo)
 RUN sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 RUN sudo apt-get update && sudo apt-get install libgdal-dev libgeos-dev libproj-dev -y
-# RUN sudo apt-get install libgdal-dev libproj-dev -y
 
 ### gsutil installation
 RUN sudo echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && sudo apt-get update -y && sudo apt-get install google-cloud-cli -y
