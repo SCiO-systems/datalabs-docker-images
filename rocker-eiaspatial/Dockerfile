@@ -1,58 +1,22 @@
+# docker build -t rocker440 --progress=plain . > >(stdbuf -oL tee docker_build_output.log) 2> >(stdbuf -oL tee -a docker_build_output.log)
+# docker run --name cg -p 8787:8787 --rm -ti -e PASSWORD=1234 rocker440
 FROM rocker/rstudio:4.4.0
 
-# USER root
-
-# ### Providing root privillages to default "rstudio" user account
-# RUN echo "rstudio ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-# USER rstudio
-# COPY packages.R packages.R
-# RUN cat /etc/sudoers
-# RUN groups rstudio
+### Providing root privillages to default "rstudio" user account
 RUN sudo usermod -aG sudo rstudio
-# RUN groups rstudio
+
 ### OS Packages installation
 RUN sudo apt-get update && sudo apt-get install aptitude gdebi-core curl wget tar build-essential cmake make default-jre default-jdk cron screen pkg-config protobuf-compiler libfontconfig1-dev libgsl-dev libudunits2-dev libprotobuf-dev libjq-dev libmagick++-dev gfortran fftw3 fftw3-dev libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libsodium-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libgmp3-dev libmpfr-dev libarchive-dev gnupg libmysqlclient-dev -y
 
 ### GDAL installation
-# RUN sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+# RUN sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable # Not necessary
 RUN sudo apt-get update && sudo apt-get install libgdal-dev libgeos-dev libproj-dev -y
-# RUN sudo apt-get install libgdal-dev libproj-dev -y
 
 ### gsutil installation
 RUN sudo echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && sudo apt-get update -y && sudo apt-get install google-cloud-cli -y
 
 ### NCO installation
 RUN sudo aptitude install nco -y
-
-# ### R installation - https://cran.r-project.org/bin/linux/ubuntu/#acknowledgements
-# RUN sudo apt install --no-install-recommends software-properties-common dirmngr -y
-# RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
-# RUN sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
-# RUN sudo apt install --no-install-recommends r-base -y
-
-###### Agelos said to omit this package
-# RUN R -e "install.packages('IRkernel',dependencies=TRUE, repos='http://cran.rstudio.com/')"
-## Use c2d4u only for IRkernel, because it didn't work on Kubernetes with install.packages.
-# RUN sudo add-apt-repository ppa:c2d4u.team/c2d4u4.0+
-# RUN sudo apt-get install r-cran-irkernel -y
-## Installing R kernel to jupyterlab
-# RUN R -e "IRkernel::installspec()"
-
-# ## Rstudio server installation (It is running under R kernel - https://posit.co/download/rstudio-server/)
-# RUN echo "deb http://security.ubuntu.com/ubuntu focal-security main" | sudo tee /etc/apt/sources.list.d/focal-security.list && \
-#     sudo apt-get update && \
-#     sudo apt-get install libssl1.1 -y
-
-# RUN cd /tmp && \
-#     wget https://download2.rstudio.org/server/focal/amd64/rstudio-server-2023.09.0-463-amd64.deb && \
-#     sudo gdebi -n rstudio-server-2023.09.0-463-amd64.deb
-
-# ENV PATH=$PATH:/usr/lib/rstudio-server/bin
-
-# ## Rstudio server Jupyter plugin installation
-# RUN python3 -m pip install jupyter-rsession-proxy
-# RUN pip install jupyter-server-proxy
 
 ### CROP models installation
 ## DSSAT installation
@@ -110,24 +74,6 @@ RUN cd /opt/ && \
 RUN sudo R CMD javareconf
 
 ### R packages installation
-# From here on: 3 cores: 48m2s, 4 cores 38m4s, 6 cores 37m3s
-# COPY packages1.R packages1.R
-# RUN sudo Rscript packages1.R
-# COPY packages2.R packages2.R
-# RUN sudo Rscript packages2.R
-# COPY packages3.R packages3.R
-# RUN sudo Rscript packages3.R
-# COPY packages4.R packages4.R
-# RUN sudo Rscript packages4.R
-
 COPY packages.R packages.R
 RUN sudo Rscript packages.R
-
-# RUN rm packages.R
-
-# ### Copying .bashrc of default $HOME directory to /opt
-# RUN sudo cp .bashrc /opt/
-
-# ### Copying bash scripts to startup notebook directory
-# COPY scripts/* /usr/local/bin/start-notebook.d/
-# USER root
+RUN rm packages.R
