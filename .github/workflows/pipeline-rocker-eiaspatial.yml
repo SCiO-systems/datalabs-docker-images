@@ -1,4 +1,4 @@
-name: Build and Push Docker Images (jupyter-eiar-notebook)
+name: Build and Push Docker Images (rocker-eiaspatial)
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - develop
       - main
     paths:
-      - ".github/workflows/pipeline-jupyter-eiar-notebook.yml"
-      - "jupyter-eiar-notebook/**"
+      - ".github/workflows/pipeline-rocker-eiaspatial.yml"
+      - "rocker-eiaspatial/**"
 
 permissions:
   contents: read
@@ -39,12 +39,12 @@ jobs:
       - name: Build and Push Docker Image (dev)
         uses: docker/build-push-action@v4
         with:
-          context: ./jupyter-eiar-notebook
-          file: ./jupyter-eiar-notebook/Dockerfile
+          context: ./rocker-eiaspatial
+          file: ./rocker-eiaspatial/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiar-notebook:dev-${{ secrets.JUPYTER_EIAR_NOTEBOOK_RELEASE_VERSION }}-${{ steps.short-sha.outputs.sha }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiar-notebook:dev-${{ secrets.JUPYTER_EIAR_NOTEBOOK_RELEASE_VERSION }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/rocker-eiaspatial:dev-${{ secrets.ROCKER_EIASPATIAL_RELEASE_VERSION }}-${{ steps.short-sha.outputs.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/rocker-eiaspatial:dev-${{ secrets.ROCKER_EIASPATIAL_RELEASE_VERSION }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -63,16 +63,16 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Pull "dev" Docker image
-        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiar-notebook:dev-${{ secrets.JUPYTER_EIAR_NOTEBOOK_RELEASE_VERSION }}
+        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/rocker-eiaspatial:dev-${{ secrets.ROCKER_EIASPATIAL_RELEASE_VERSION }}
 
       - name: Tag producion Docker image
-        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiar-notebook:dev-${{ secrets.JUPYTER_EIAR_NOTEBOOK_RELEASE_VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiar-notebook:${{ secrets.JUPYTER_EIAR_NOTEBOOK_RELEASE_VERSION }}
+        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/rocker-eiaspatial:dev-${{ secrets.ROCKER_EIASPATIAL_RELEASE_VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/rocker-eiaspatial:${{ secrets.ROCKER_EIASPATIAL_RELEASE_VERSION }}
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiar-notebook:${{ secrets.JUPYTER_EIAR_NOTEBOOK_RELEASE_VERSION }}
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/rocker-eiaspatial:${{ secrets.ROCKER_EIASPATIAL_RELEASE_VERSION }}
 
       - name: Tag producion Docker image (non specified version)
-        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiar-notebook:${{ secrets.JUPYTER_EIAR_NOTEBOOK_RELEASE_VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiar-notebook
+        run: docker tag ${{ secrets.DOCKERHUB_USERNAME }}/rocker-eiaspatial:${{ secrets.ROCKER_EIASPATIAL_RELEASE_VERSION }} ${{ secrets.DOCKERHUB_USERNAME }}/rocker-eiaspatial
 
       - name: Push Docker image (non specified version)
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/jupyter-eiar-notebook
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/rocker-eiaspatial
