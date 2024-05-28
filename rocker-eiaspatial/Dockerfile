@@ -1,19 +1,22 @@
 FROM rocker/rstudio:4.4.0
 
-USER root
+# USER root
 
-### Providing root privillages to default "rstudio" user account
-RUN echo "rstudio ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+# ### Providing root privillages to default "rstudio" user account
+# RUN echo "rstudio ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-USER rstudio
+# USER rstudio
 # COPY packages.R packages.R
-
+# RUN cat /etc/sudoers
+# RUN groups rstudio
+RUN sudo usermod -aG sudo rstudio
+# RUN groups rstudio
 ### OS Packages installation
 RUN sudo apt-get update && sudo apt-get install aptitude gdebi-core curl wget tar build-essential cmake make default-jre default-jdk cron screen pkg-config protobuf-compiler libfontconfig1-dev libgsl-dev libudunits2-dev libprotobuf-dev libjq-dev libmagick++-dev gfortran fftw3 fftw3-dev libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libsodium-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libgmp3-dev libmpfr-dev libarchive-dev gnupg libmysqlclient-dev -y
 
 ### GDAL installation
 # RUN sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-# RUN sudo apt-get update && sudo apt-get install libgdal-dev libgeos-dev libproj-dev -y
+RUN sudo apt-get update && sudo apt-get install libgdal-dev libgeos-dev libproj-dev -y
 # RUN sudo apt-get install libgdal-dev libproj-dev -y
 
 ### gsutil installation
@@ -127,4 +130,4 @@ RUN sudo Rscript packages.R
 
 # ### Copying bash scripts to startup notebook directory
 # COPY scripts/* /usr/local/bin/start-notebook.d/
-USER root
+# USER root
