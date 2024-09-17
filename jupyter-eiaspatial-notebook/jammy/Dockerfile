@@ -9,7 +9,7 @@ USER jovyan
 
 ### OS Packages installation
 RUN sudo apt-get update && sudo apt-get install aptitude gdebi-core curl wget tar build-essential cmake make default-jre default-jdk cron screen pkg-config protobuf-compiler \
-    libfontconfig1-dev libgsl-dev libudunits2-dev libprotobuf-dev libjq-dev libmagick++-dev gfortran fftw3 fftw3-dev libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libsodium-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libgmp3-dev libmpfr-dev libarchive-dev gnupg software-properties-common dirmngr -y
+    libfontconfig1-dev libgsl-dev libudunits2-dev libprotobuf-dev libjq-dev libmagick++-dev gfortran fftw3 fftw3-dev libxml2-dev libcurl4-openssl-dev libfontconfig1-dev libssl-dev libsodium-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libgmp3-dev libmpfr-dev libarchive-dev gnupg software-properties-common dirmngr rsync -y
 
 ### GDAL installation (unstable repo)
 RUN sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
@@ -97,7 +97,7 @@ RUN sudo apt-get update && sudo apt-get install libsqlite3-dev dotnet-sdk-6.0 -y
 RUN cd /opt/ && \
     sudo git clone https://github.com/APSIMInitiative/ApsimX && \
     sudo chown -R jovyan:users /opt/ApsimX/. && \
-    dotnet build -c Release ./ApsimX/ApsimX.sln
+    sudo dotnet build -c Release ./ApsimX/ApsimX.sln
 
 ### Jupyter extensions & plugins installation
 RUN pip install aquirdturtle_collapsible_headings
