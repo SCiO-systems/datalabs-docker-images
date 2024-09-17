@@ -97,7 +97,7 @@ RUN sudo apt-get update && sudo apt-get install libsqlite3-dev dotnet-sdk-6.0 -y
 RUN cd /opt/ && \
     sudo git clone https://github.com/APSIMInitiative/ApsimX && \
     sudo chown -R jovyan:users /opt/ApsimX/. && \
-    dotnet build -c Release ./ApsimX/ApsimX.sln
+    sudo dotnet build -c Release ./ApsimX/ApsimX.sln
 
 ### Jupyter extensions & plugins installation
 RUN pip install aquirdturtle_collapsible_headings
