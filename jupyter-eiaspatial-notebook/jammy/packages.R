@@ -21,4 +21,4 @@ devtools::install_github(c("CIAT-DAPA/analogues",
                    "SantanderMetGroup/convertR",
                    "SantanderMetGroup/climate4R.indices",
                    "bakaburg1/BaySREn",
-                   "femiguez/apsimx"), configure.args="Ncpus = 4")
+                   "femiguez/apsimx"), configure.args="Ncpus = 1")

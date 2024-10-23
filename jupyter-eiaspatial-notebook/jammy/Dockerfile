@@ -91,9 +91,8 @@ RUN cp -r /opt/DSSAT/v4.8.1.40/dssat-csm-data/* /opt/DSSAT/v4.8.1.40
 RUN sed -i 's,/usr/local,opt/DSSAT/v4.8.1.40,g' /opt/DSSAT/v4.8.1.40/DSSATPRO.L48
 RUN chown -R jovyan:users /opt/DSSAT/v4.8.1.40/*
 
-# ApsimX 2
-RUN sudo apt-get update && sudo apt-get install libsqlite3-dev dotnet-sdk-6.0 -y
-RUN sudo apt-get install gtk-sharp3 libgtksourceview-4-0 zenity -y
+# ApsimX
+RUN sudo apt-get update && sudo apt-get install libsqlite3-dev dotnet-sdk-6.0 gtk-sharp3 libgtksourceview-4-0 zenity -y
 COPY ./apsim-7592.deb ./apsim-7592.deb
 RUN sudo dpkg -i apsim-7592.deb
 
@@ -122,7 +121,7 @@ RUN sudo Rscript packages.R
 ### Python packages installation
 RUN conda install -c conda-forge --file requirements.txt -y
 
-RUN rm packages.R requirements.txt
+RUN rm packages.R requirements.txt packages_test.R
 
 ### Copying .bashrc of default $HOME directory to /opt
 RUN sudo cp .bashrc /opt/
