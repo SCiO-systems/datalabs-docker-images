@@ -38,8 +38,8 @@ RUN echo "deb http://security.ubuntu.com/ubuntu focal-security main" | sudo tee 
     sudo apt-get install libssl1.1 -y
 
 RUN cd /tmp && \
-    wget https://download2.rstudio.org/server/focal/amd64/rstudio-server-2023.09.0-463-amd64.deb && \
-    sudo gdebi -n rstudio-server-2023.09.0-463-amd64.deb
+    wget https://download2.rstudio.org/server/focal/amd64/rstudio-server-2024.09.0-375-amd64.deb && \
+    sudo gdebi -n rstudio-server-2024.09.0-375-amd64.deb
 
 ENV PATH=$PATH:/usr/lib/rstudio-server/bin
 
