@@ -38,8 +38,8 @@ RUN echo "deb http://security.ubuntu.com/ubuntu focal-security main" | sudo tee 
     sudo apt-get install libssl1.1 -y
 
 RUN cd /tmp && \
-    wget https://download2.rstudio.org/server/focal/amd64/rstudio-server-2023.09.0-463-amd64.deb && \
-    sudo gdebi -n rstudio-server-2023.09.0-463-amd64.deb
+    wget https://download2.rstudio.org/server/focal/amd64/rstudio-server-2024.09.0-375-amd64.deb && \
+    sudo gdebi -n rstudio-server-2024.09.0-375-amd64.deb
 
 ENV PATH=$PATH:/usr/lib/rstudio-server/bin
 
@@ -91,13 +91,10 @@ RUN cp -r /opt/DSSAT/v4.8.1.40/dssat-csm-data/* /opt/DSSAT/v4.8.1.40
 RUN sed -i 's,/usr/local,opt/DSSAT/v4.8.1.40,g' /opt/DSSAT/v4.8.1.40/DSSATPRO.L48
 RUN chown -R jovyan:users /opt/DSSAT/v4.8.1.40/*
 
-## ApsimX
-RUN sudo apt-get update && sudo apt-get install libsqlite3-dev dotnet-sdk-6.0 -y
-
-RUN cd /opt/ && \
-    sudo git clone https://github.com/APSIMInitiative/ApsimX && \
-    sudo chown -R jovyan:users /opt/ApsimX/. && \
-    sudo dotnet build -c Release ./ApsimX/ApsimX.sln
+# ApsimX
+RUN sudo apt-get update && sudo apt-get install libsqlite3-dev dotnet-sdk-6.0 gtk-sharp3 libgtksourceview-4-0 zenity -y
+COPY ./apsim-7592.deb ./apsim-7592.deb
+RUN sudo dpkg -i apsim-7592.deb
 
 ### Jupyter extensions & plugins installation
 RUN pip install aquirdturtle_collapsible_headings
@@ -124,7 +121,7 @@ RUN sudo Rscript packages.R
 ### Python packages installation
 RUN conda install -c conda-forge --file requirements.txt -y
 
-RUN rm packages.R requirements.txt
+RUN rm packages.R requirements.txt packages_test.R apsim-7592.deb
 
 ### Copying .bashrc of default $HOME directory to /opt
 RUN sudo cp .bashrc /opt/
