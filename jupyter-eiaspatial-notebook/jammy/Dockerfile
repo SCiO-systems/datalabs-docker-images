@@ -121,7 +121,7 @@ RUN sudo Rscript packages.R
 ### Python packages installation
 RUN conda install -c conda-forge --file requirements.txt -y
 
-RUN rm packages.R requirements.txt packages_test.R
+RUN rm packages.R requirements.txt packages_test.R apsim-7592.deb
 
 ### Copying .bashrc of default $HOME directory to /opt
 RUN sudo cp .bashrc /opt/
